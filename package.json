@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "electron ."
+  },
+  "main": "src/main.js",
+  "name": "listLess",
+  "version": "1.0.0",
+  "license": "MIT"
+}
