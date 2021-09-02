@@ -4,7 +4,9 @@ var desc = document.getElementById('innerTextOutput');
 var genBtn = document.getElementById('generate-btn');
 var isPoke = document.getElementById('pokemon');
 var isYugi = document.getElementById('yugioh');
+var imgBox = document.getElementById('image-box');
 let listName = '';
+let filePath = '';
 
 const copyText = (e) => {
   navigator.clipboard.writeText(e)
@@ -15,6 +17,11 @@ const copyText = (e) => {
 }
 
 const generateName = () => {
+  if (!isPoke.checked && !isYugi.checked) {
+    console.error('Need to check off if pokemon or yugioh')
+    return
+  }
+
   console.log("yeeet", listName)
   // if (listName) filename.innerText = listName.replace(/\.[^/.]+$/, "")
 
@@ -28,10 +35,12 @@ const generateName = () => {
     regenName = `${listName} Yugioh TCG`
   }
 
-  if (!regenName) {
-    console.error('Need to check off if pokemon or yugioh')
-    return
-  }
+  // generate image
+  imgBox.innerHTML = ''
+  const img = document.createElement('img')
+  img.setAttribute('src', filePath)
+  img.classList.add('card-img')
+  imgBox.appendChild(img)
 
   document.getElementById('research-link-box').innerHTML = ''
 
@@ -59,8 +68,6 @@ const generateName = () => {
 
     <div style="margin-left: 2rem;">
       <ul>
-        <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">Selling from my collection I no longer use or want.</li>
-
         <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">One Card.</li>
 
         <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">Ships inside penny sleeve and top loader.</li>
@@ -83,8 +90,11 @@ document.addEventListener('drop', (event) => {
         var file = f.name.replace(/\.[^/.]+$/, "").replace(/\+/, "/")
         filename.innerText = file
         listName = file
+        filePath = f.path
 
-        // console.log('check f', f)
+        console.log('check f', f)
+
+        generateName()
       }
 });
 
