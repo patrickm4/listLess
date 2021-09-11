@@ -5,5 +5,8 @@
   "main": "src/main.js",
   "name": "listLess",
   "version": "1.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^14.0.0"
+  }
 }
