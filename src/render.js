@@ -6,8 +6,6 @@ var cardType = document.getElementsByName('card-type');
 var imgBox = document.getElementById('image-box');
 let listName = '';
 let filePath = '';
-let isPoke = false;
-let isYugi = false;
 
 const copyText = (e) => {
   navigator.clipboard.writeText(e)
@@ -17,25 +15,25 @@ const copyText = (e) => {
     .catch(err => console.log("fail", err))
 }
 
-const generateName = () => {
-  if (!listName.toLowerCase().split(' ').includes('set')) {
-    for (const card of cardType) {
-      if (card.value === 'yugi') {
-        card.checked = true
+const generateName = (val) => {
+  if (val === 'auto') {
+    if (!listName.toLowerCase().split(' ').includes('set')) {
+      for (const card of cardType) {
+        if (card.value === 'yugi') {
+          card.checked = true
+        }
+        if (card.value === 'poke') {
+          card.checked = false
+        }
       }
-      if (card.value === 'poke') {
-        card.checked = false
-      }
-    }
-
-  }
-
-  for (const card of cardType) {
-    if (card.checked) {
-      if (card.value === 'poke') {
-        isPoke = true
-      } else {
-        isYugi = true
+    } else {
+      for (const card of cardType) {
+        if (card.value === 'poke') {
+          card.checked = true
+        }
+        if (card.value === 'yugi') {
+          card.checked = false
+        }
       }
     }
   }
@@ -45,12 +43,14 @@ const generateName = () => {
 
   var regenName = ''
 
-  // change listing name
-  if (isPoke) {
-    regenName = `${listName} Pokemon TCG`
-  }
-  if (isYugi) {
-    regenName = `${listName} Yugioh TCG`
+  for (const card of cardType) {
+    if (card.checked) {
+      if (card.value === 'poke') {
+        regenName = `${listName} Pokemon TCG`
+      } else {
+        regenName = `${listName} Yugioh TCG`
+      }
+    }
   }
 
   // generate image
@@ -112,7 +112,9 @@ document.addEventListener('drop', (event) => {
 
         console.log('check f', f)
 
-        generateName()
+        console.log("check btn", genBtn)
+
+        generateName('auto')
       }
 });
 
@@ -129,4 +131,4 @@ document.addEventListener('dragleave', (event) => {
     // console.log('File has left the Drop Space');
 });
 
-genBtn.addEventListener('click', generateName)
+genBtn.addEventListener('click', generateName);
