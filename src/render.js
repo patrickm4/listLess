@@ -2,11 +2,12 @@
 var filename = document.getElementById('filename');
 var desc = document.getElementById('innerTextOutput');
 var genBtn = document.getElementById('generate-btn');
-var isPoke = document.getElementById('pokemon');
-var isYugi = document.getElementById('yugioh');
+var cardType = document.getElementsByName('card-type');
 var imgBox = document.getElementById('image-box');
 let listName = '';
 let filePath = '';
+let isPoke = false;
+let isYugi = false;
 
 const copyText = (e) => {
   navigator.clipboard.writeText(e)
@@ -17,9 +18,14 @@ const copyText = (e) => {
 }
 
 const generateName = () => {
-  if (!isPoke.checked && !isYugi.checked) {
-    console.error('Need to check off if pokemon or yugioh')
-    return
+  for (const card of cardType) {
+    if (card.checked) {
+      if (card.value === 'poke') {
+        isPoke = true
+      } else {
+        isYugi = true
+      }
+    }
   }
 
   console.log("yeeet", listName)
@@ -28,10 +34,10 @@ const generateName = () => {
   var regenName = ''
 
   // change listing name
-  if (isPoke.checked) {
+  if (isPoke) {
     regenName = `${listName} Pokemon TCG`
   }
-  if (isYugi.checked) {
+  if (isYugi) {
     regenName = `${listName} Yugioh TCG`
   }
 
