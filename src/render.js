@@ -2,6 +2,7 @@
 var filename = document.getElementById('filename');
 var desc = document.getElementById('innerTextOutput');
 var genBtn = document.getElementById('generate-btn');
+var copyDescBtn = document.getElementById('copy-desc');
 var cardType = document.getElementsByName('card-type');
 var imgBox = document.getElementById('image-box');
 let listName = '';
@@ -132,3 +133,7 @@ document.addEventListener('dragleave', (event) => {
 });
 
 genBtn.addEventListener('click', generateName);
+
+copyDescBtn.addEventListener('click', function () {
+  // copyDesc
+});
