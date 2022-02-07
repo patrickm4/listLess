@@ -18,6 +18,18 @@ const copyText = (e) => {
 }
 
 const generateName = () => {
+  if (!listName.toLowerCase().split(' ').includes('set')) {
+    for (const card of cardType) {
+      if (card.value === 'yugi') {
+        card.checked = true
+      }
+      if (card.value === 'poke') {
+        card.checked = false
+      }
+    }
+
+  }
+
   for (const card of cardType) {
     if (card.checked) {
       if (card.value === 'poke') {
