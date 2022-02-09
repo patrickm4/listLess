@@ -5,9 +5,7 @@ const config = require('../config.js');
 pokemon.configure({apiKey: config.pokeKey});
 
 contextBridge.exposeInMainWorld("poke", {
-  get: (data) => {
-    console.log("preload", data);
-
-    return pokemon.card.find(data)
+  get: (options) => {
+    return pokemon.card.all(options)
   }
 });

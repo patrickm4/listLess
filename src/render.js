@@ -7,13 +7,11 @@ var imgBox = document.getElementById('image-box');
 let listName = '';
 let filePath = '';
 
-const callPokemonApi = async () => {
-  return await window.poke.get("base1-4").then(r => r);
+const pokeApi = async (name, num, setTotal) => {
+  return await window.poke.get({ q: `name:${name} number:${num} set.total:${setTotal}`}).then(r => r);
 }
 
-callPokemonApi().then(e => { console.log("yaaww", e) }).catch(err => { console.log("err", err) });
-
-console.log("yeeet");
+// callPokemonApi().then(e => { console.log("yaaww", e) }).catch(err => { console.log("err", err) });
 
 const copyText = (e) => {
   navigator.clipboard.writeText(e)
@@ -24,8 +22,11 @@ const copyText = (e) => {
 }
 
 const generateName = (val) => {
+  // let isPoke = false;
+  // let isYugi = false;
+
   if (val === 'auto') {
-    if (!listName.toLowerCase().split(' ').includes('set')) {
+    if (!listName.toLowerCase().split('').includes('/')) {
       for (const card of cardType) {
         if (card.value === 'yugi') {
           card.checked = true
@@ -42,6 +43,27 @@ const generateName = (val) => {
         if (card.value === 'yugi') {
           card.checked = false
         }
+      }
+    }
+  }
+
+  for (const card of cardType) {
+    if (card.checked) {
+      if (card.value === 'poke') {
+        const nameSplit = listName.split(' ')
+        const splitSplit = nameSplit[nameSplit.length - 1].split('/')
+
+        const nameOnly = nameSplit.slice()
+        nameOnly.splice(nameSplit.length - 1, 1)
+
+        pokeApi(nameSplit[0], splitSplit[0], splitSplit[1])
+          .then(result => {
+            if (result.length > 1) {
+              console.warn("More than 1 card matched! Accepting the first card")
+            }
+
+            filename.innerText = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
+          })
       }
     }
   }
