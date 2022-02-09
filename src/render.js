@@ -1,4 +1,3 @@
-
 var filename = document.getElementById('filename');
 var desc = document.getElementById('innerTextOutput');
 var genBtn = document.getElementById('generate-btn');
@@ -7,6 +6,14 @@ var cardType = document.getElementsByName('card-type');
 var imgBox = document.getElementById('image-box');
 let listName = '';
 let filePath = '';
+
+const callPokemonApi = async () => {
+  return await window.poke.get("base1-4").then(r => r);
+}
+
+callPokemonApi().then(e => { console.log("yaaww", e) }).catch(err => { console.log("err", err) });
+
+console.log("yeeet");
 
 const copyText = (e) => {
   navigator.clipboard.writeText(e)
