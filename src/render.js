@@ -78,15 +78,19 @@ const generateName = (val) => {
 
           // TODO issues with more than one word names
           pokeApi(encodeURIComponent(name), num, total)
-          .then(result => {
-            if (result && result.length > 1) {
-              console.warn("More than 1 card matched! Accepting the first card")
-            }
+            .then(result => {
+              console.log("pokemon card", result)
 
-            console.log("pokemon card", result)
+              if (result && result.length === 0) {
+                console.log("No card found")
+              } else {
+                if (result.length > 1) {
+                  console.warn("More than 1 card matched! Accepting the first card")
+                }
 
-            filename.innerText = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
-          })
+                filename.innerText = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
+              }
+            })
         }
       }
     }
