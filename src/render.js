@@ -51,25 +51,43 @@ const generateName = (val) => {
     if (card.checked) {
       if (card.value === 'poke') {
         const nameSplit = listName.split(' ')
-        const splitSplit = nameSplit[nameSplit.length - 1].split('/')
 
-        const nameOnly = nameSplit.slice()
-        nameOnly.splice(nameSplit.length - 1, 1)
+        // if its not an old card
+        if (!nameSplit.includes('Set') || !nameSplit.includes('set')) {
+          const nameSplitCopy = nameSplit.slice();
 
-        pokeApi(nameSplit[0], splitSplit[0], splitSplit[1])
+          let num = 0
+          let total = 0
+          let name = []
+
+          for (const e of nameSplitCopy) {
+            if (e.includes('/')) {
+              let x = e.split('/');
+              num = Number(x[0]);
+              total = Number(x[1]) ;
+            } else {
+              // we dont want the multi rename parenthesis if it has it
+              if (!e.includes('(')) {
+                name.push(e)
+              }
+            }
+          }
+
+          name = name.join(' ')
+
+          // TODO issues with more than one word names
+          pokeApi(encodeURIComponent(name), num, total)
           .then(result => {
-            if (result.length > 1) {
+            if (result && result.length > 1) {
               console.warn("More than 1 card matched! Accepting the first card")
             }
 
             filename.innerText = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
           })
+        }
       }
     }
   }
-
-  console.log("yeeet", listName)
-  // if (listName) filename.innerText = listName.replace(/\.[^/.]+$/, "")
 
   var regenName = ''
 
@@ -165,4 +183,19 @@ genBtn.addEventListener('click', generateName);
 
 copyDescBtn.addEventListener('click', function () {
   // copyDesc
+  var reg = /<\/div><div>/g
+  var startRegex = /<div>/
+  var endRegex = /<\/div>/
+
+  // var parsedList = desc.innerHTML.replace(reg, '\n').replace(startRegex, '').replace(endRegex, '')
+  var parsedList = desc.innerHTML
+  navigator.clipboard.writeText(parsedList)
+    .then(() => {
+      // TODO create element then remove at the end of animation
+      // msgCopy.classList.add('show-success-message')
+      // setTimeout(() => {
+      //   msgCopy.classList.remove('show-success-message')
+      // }, 2500)
+    })
+    .catch(err => console.log("fail", err))
 });
