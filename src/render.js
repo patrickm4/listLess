@@ -82,6 +82,8 @@ const generateName = (val) => {
               console.warn("More than 1 card matched! Accepting the first card")
             }
 
+            console.log("pokemon card", result)
+
             filename.innerText = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
           })
         }
@@ -182,12 +184,6 @@ document.addEventListener('dragleave', (event) => {
 genBtn.addEventListener('click', generateName);
 
 copyDescBtn.addEventListener('click', function () {
-  // copyDesc
-  var reg = /<\/div><div>/g
-  var startRegex = /<div>/
-  var endRegex = /<\/div>/
-
-  // var parsedList = desc.innerHTML.replace(reg, '\n').replace(startRegex, '').replace(endRegex, '')
   var parsedList = desc.innerHTML
   navigator.clipboard.writeText(parsedList)
     .then(() => {
@@ -196,6 +192,7 @@ copyDescBtn.addEventListener('click', function () {
       // setTimeout(() => {
       //   msgCopy.classList.remove('show-success-message')
       // }, 2500)
+      console.log("copied desc")
     })
-    .catch(err => console.log("fail", err))
+    .catch(err => console.log("fail copy desc", err))
 });
