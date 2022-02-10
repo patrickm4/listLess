@@ -19,3 +19,11 @@ body {
   color: #000;
   cursor: pointer;
 }
+
+#copy-filename {
+  padding: .75em 1.5em;
+  background-color: aquamarine;
+  border-radius: .2em;
+  color: #000;
+  cursor: pointer;
+}

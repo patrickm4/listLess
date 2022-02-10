@@ -2,6 +2,7 @@ var filename = document.getElementById('filename');
 var desc = document.getElementById('innerTextOutput');
 var genBtn = document.getElementById('generate-btn');
 var copyDescBtn = document.getElementById('copy-desc');
+var copyFilenameBtn = document.getElementById('copy-filename');
 var cardType = document.getElementsByName('card-type');
 var imgBox = document.getElementById('image-box');
 let listName = '';
@@ -195,4 +196,18 @@ copyDescBtn.addEventListener('click', function () {
       console.log("copied desc")
     })
     .catch(err => console.log("fail copy desc", err))
+});
+
+copyFilenameBtn.addEventListener('click', function () {
+  var parsedList = filename.innerText
+  navigator.clipboard.writeText(parsedList)
+    .then(() => {
+      // TODO create element then remove at the end of animation
+      // msgCopy.classList.add('show-success-message')
+      // setTimeout(() => {
+      //   msgCopy.classList.remove('show-success-message')
+      // }, 2500)
+      console.log("copied filename")
+    })
+    .catch(err => console.log("fail copy filename", err))
 });
