@@ -48,6 +48,9 @@ const generateName = (val) => {
     }
   }
 
+  var regenName = ''
+  var ebaySearchQuery = ''
+
   for (const card of cardType) {
     if (card.checked) {
       if (card.value === 'poke') {
@@ -76,6 +79,8 @@ const generateName = (val) => {
 
           name = name.join(' ')
 
+          ebaySearchQuery = `${name} ${num}/${total}`
+
           // TODO issues with more than one word names
           pokeApi(encodeURIComponent(name), num, total)
             .then(result => {
@@ -83,30 +88,46 @@ const generateName = (val) => {
 
               if (result && result.length === 0) {
                 console.log("No card found")
+                genEbaySite(ebaySearchQuery)
               } else {
                 if (result.length > 1) {
                   console.warn("More than 1 card matched! Accepting the first card")
                 }
 
-                filename.innerText = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
+                const cardName = `${result[0].name} ${result[0].number}/${result[0].set.total} ${result[0].rarity} ${result[0].set.name} Set Pokemon TCG`
+
+                regenName = cardName
+
+                filename.innerText = cardName
+
+                genDesc(cardName)
+                genEbaySite(ebaySearchQuery)
               }
             })
+        } else {
+          regenName = `${listName} Pokemon TCG`
+          genDesc()
+          genEbaySite()
+          filename.innerText = regenName
         }
-      }
-    }
-  }
-
-  var regenName = ''
-
-  for (const card of cardType) {
-    if (card.checked) {
-      if (card.value === 'poke') {
-        regenName = `${listName} Pokemon TCG`
-      } else {
+      } else if (card.value === 'yugi') {
         regenName = `${listName} Yugioh TCG`
+        genDesc()
+        genEbaySite()
+        filename.innerText = regenName
       }
     }
   }
+
+  // for (const card of cardType) {
+  //   if (card.checked) {
+  //     if (card.value === 'poke') {
+  //       regenName = `${listName} Pokemon TCG`
+  //     } else {
+  //       regenName = `${listName} Yugioh TCG`
+  //     }
+  //   }
+  // }
 
   // generate image
   imgBox.innerHTML = ''
@@ -117,41 +138,43 @@ const generateName = (val) => {
 
   document.getElementById('research-link-box').innerHTML = ''
 
-  // generate research link
-  const btnLink = document.createElement('a')
-  btnLink.innerText = 'EBay search sold listings of card'
+  const genEbaySite = (q) => {
+    const searchQ = q ? q : listName
 
-  btnLink.setAttribute('href', `https://www.ebay.ca/sch/i.html?_from=R40&_nkw=${listName}&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1`)
-  btnLink.setAttribute('target', '_blank')
+    // generate research link
+    const btnLink = document.createElement('a')
+    btnLink.innerText = 'EBay search sold listings of card'
 
-  document.getElementById('research-link-box').appendChild(btnLink)
+    btnLink.setAttribute('href', `https://www.ebay.ca/sch/i.html?_from=R40&_nkw=${encodeURIComponent(searchQ)}&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1`)
+    btnLink.setAttribute('target', '_blank')
 
-  // https://www.ebay.ca/sch/i.html?_from=R40&_nkw=+Ekans+46%2F62&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1
+    document.getElementById('research-link-box').appendChild(btnLink)
+  }
 
-  filename.innerText = regenName
+  const genDesc = (name) => {
+    // fill text area with desc
+    desc.innerText = `
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;600&display=swap" rel="stylesheet">
 
-  // fill text area with desc
-  desc.innerText = `
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;600&display=swap" rel="stylesheet">
 
-
-  <div style="display:flex; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.175); padding: 10px 15px;">
-    <div style="font-size: 16pt; font-weight:600; font-family: 'Dosis', sans-serif; width: 80%; overflow-wrap: break-word;">${regenName}</div>
+    <div style="display:flex; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.175); padding: 10px 15px;">
+    <div style="font-size: 16pt; font-weight:600; font-family: 'Dosis', sans-serif; width: 80%; overflow-wrap: break-word;">${ name ? name : regenName}</div>
 
     <div style="margin-left: 2rem;">
-      <ul>
-        <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">One Card.</li>
+    <ul>
+    <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">One Card.</li>
 
-        <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">Ships inside penny sleeve and top loader.</li>
+    <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">Ships inside penny sleeve and top loader.</li>
 
-        <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">Orders are usually shipped in a plain white envelope. Depending on the value and/or quantity of cards, orders will be shipped either in a bubble mailer or box.</li>
+    <li style="font-size: 12pt; margin-bottom: 1em; font-weight:300; font-family: 'Dosis', sans-serif;">Orders are usually shipped in a plain white envelope. Depending on the value and/or quantity of cards, orders will be shipped either in a bubble mailer or box.</li>
 
-        <li style="font-size: 12pt; font-weight:300; font-family: 'Dosis', sans-serif;">Card shipped out from BC, Canada</li>
-      </ul>
+    <li style="font-size: 12pt; font-weight:300; font-family: 'Dosis', sans-serif;">Card shipped out from BC, Canada</li>
+    </ul>
     </div>
-  </div>
-  `
+    </div>
+    `
+  }
 }
 
 
