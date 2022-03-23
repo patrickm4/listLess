@@ -5,9 +5,11 @@ var copyDescBtn = document.getElementById('copy-desc');
 var copyFilenameBtn = document.getElementById('copy-filename');
 var cardType = document.getElementsByName('card-type');
 var imgBox = document.getElementById('image-box');
+var nameBtns = document.getElementById('name-btns');
 let listName = '';
 let filePath = '';
 let regenName = ''
+let newName = []
 
 const genDesc = (name) => {
   // fill text area with desc
@@ -59,6 +61,44 @@ const copyText = (e) => {
       console.log("copied!")
     })
     .catch(err => console.log("fail", err))
+}
+
+const buildName = (str) => {
+  if (str) {
+    newName.push(str)
+  }
+
+  if (newName.length > 0) {
+    console.log("yaaaw", newName.join(' '))
+
+    filename.innerText = newName.join(' ')
+  }
+}
+
+const createNameBtns = (blocks) => {
+  if (!Array.isArray(blocks)) {
+    blocks = [blocks]
+  }
+
+  blocks.forEach(b => {
+    let block = document.createElement('button')
+    block.onclick = buildName(b)
+    block.textContent = b
+    nameBtns.appendChild(block)
+  })
+
+  const wordsToAdd = ['Holo', 'Reverse Holo', 'Mock Set', 'Uncommon', 'Common', 'Rare']
+
+  wordsToAdd.forEach((item, i) => {
+    let block = document.createElement('button')
+    block.addEventListener('click', function(){
+      buildName(item)
+    })
+    block.textContent = item
+    nameBtns.appendChild(block)
+  })
+
+
 }
 
 const generateName = (val) => {
@@ -128,6 +168,10 @@ const generateName = (val) => {
               if (result && result.length === 0) {
                 console.log("No card found")
                 genEbaySite(ebaySearchQuery)
+
+                filename.innerText = ''
+
+                createNameBtns([name, `${num}/${total}`])
               } else {
                 if (result.length > 1) {
                   console.warn("More than 1 card matched! Accepting the first card")
