@@ -217,7 +217,7 @@ const generateName = (val) => {
   img.classList.add('card-img')
   imgBox.appendChild(img)
 
-  document.getElementById('research-link-box').innerHTML = ''
+  // document.getElementById('research-link-box').innerHTML = ''
 }
 
 
@@ -227,6 +227,10 @@ document.addEventListener('drop', (event) => {
 
     newName = []
     nameBtns.innerHTML = ""
+    document.getElementById('research-link-box').innerHTML = ""
+
+    // TODO generate a description for manually created names for cards not found in API
+    // desc.innerText = ""
 
     for (const f of event.dataTransfer.files) {
         var file = f.name.replace(/\.[^/.]+$/, "").replace(/\+/, "/")
