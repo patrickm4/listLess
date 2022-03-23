@@ -225,6 +225,9 @@ document.addEventListener('drop', (event) => {
     event.preventDefault();
     event.stopPropagation();
 
+    newName = []
+    nameBtns.innerHTML = ""
+
     for (const f of event.dataTransfer.files) {
         var file = f.name.replace(/\.[^/.]+$/, "").replace(/\+/, "/")
         filename.innerText = file
