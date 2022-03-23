@@ -6,6 +6,7 @@ function createWindow () {
     width: 900,
     height: 1040,
     show: false,
+    fullscreenable: true,
     webPreferences: {
       nodeIntegration: false, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
@@ -20,6 +21,7 @@ function createWindow () {
 
   win.once('ready-to-show', () => {
     win.show()
+    win.maximize()
   })
 }
 

@@ -69,8 +69,6 @@ const buildName = (str) => {
   }
 
   if (newName.length > 0) {
-    console.log("yaaaw", newName.join(' '))
-
     filename.innerText = newName.join(' ')
   }
 }
