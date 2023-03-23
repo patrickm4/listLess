@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain  } = require('electron')
+const { createWorker } = require('tesseract.js');
 const path = require("path");
 
 function createWindow () {
@@ -12,6 +13,7 @@ function createWindow () {
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: path.join(__dirname, "preload.js"),
+      sandbox: false
     },
   })
 
@@ -29,7 +31,27 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 // This method is equivalent to 'app.on('ready', function())'
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  ipcMain.handle('tess', async (event, fp) => {
+    const filePath = await fp
+    console.log("yeeeet", filePath)
+
+    const worker = await createWorker({
+      // cachePath: path.join(__dirname, 'lang-data'),
+      logger: m => console.log(m)
+    });
+
+    (async () => {
+      await worker.loadLanguage('eng');
+      await worker.initialize('eng');
+      const { data: { text } } = await worker.recognize(filePath);
+      console.log(text);
+      await worker.terminate();
+      return text
+    })();
+  })
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

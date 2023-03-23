@@ -50,7 +50,7 @@ const genEbaySite = (q) => {
 }
 
 const pokeApi = async (name, num, setTotal) => {
-  return await window.poke.get({ q: `name:${name} number:${num} set.total:${setTotal}`}).then(r => r);
+  return await window.electron.pokeGet({ q: `name:${name} number:${num} set.total:${setTotal}`}).then(r => r);
 }
 
 // callPokemonApi().then(e => { console.log("yaaww", e) }).catch(err => { console.log("err", err) });
@@ -242,7 +242,18 @@ document.addEventListener('drop', (event) => {
 
         console.log("check btn", genBtn)
 
-        generateName('auto')
+        // No file name, use tesseract
+        if (Number(listName.split('-')[0]) > 2020) {
+          const runTesseract = async () => {
+            const text = await window.electron.tesseractGet(filePath)
+
+            //TODO not getting back result from tesseract
+            console.log("check the text", text)
+          }
+          runTesseract()
+        } else {
+          // generateName('auto')
+        }
       }
 });
 

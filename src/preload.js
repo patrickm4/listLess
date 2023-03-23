@@ -4,8 +4,11 @@ const config = require('../config.js');
 
 pokemon.configure({apiKey: config.pokeKey});
 
-contextBridge.exposeInMainWorld("poke", {
-  get: (options) => {
+contextBridge.exposeInMainWorld("electron", {
+  pokeGet: (options) => {
     return pokemon.card.all(options)
-  }
+  },
+  tesseractGet: (filePath) => ipcRenderer.invoke('tess', filePath).then(res => {
+    return res
+  })
 });
