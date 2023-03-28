@@ -12,6 +12,7 @@ function createWindow () {
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: path.join(__dirname, "preload.js"),
+      sandbox: false
     },
   })
 
